@@ -23,6 +23,6 @@ ls -1 *.jpg \
     | grep -v ".cropped.jpg" \
     | sed 's/.jpg$//' \
     | xargs -iXX bash -c 'convert -verbose -virtual-pixel edge -crop \
-            $(magick XX.jpg -virtual-pixel edge -blur 0x15 -fuzz '${FUZZ}' \
+            $(convert XX.jpg -virtual-pixel edge -blur 0x15 -fuzz '${FUZZ}' \
                      -trim -format "%wx%h%O" info:) \
             XX.jpg '${OUTPUT_DIR}'/XX.cropped.jpg'
