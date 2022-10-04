@@ -4,7 +4,7 @@
 ## See https://www.imagemagick.org/Usage/crop/#trim_noisy
 
 ## Change value of FUZZ to accomodate slight color changes in scan
-FUZZ="15%"
+FUZZ="50%"
 
 
 if [ "$#" -ne 2 ]; then
@@ -22,4 +22,7 @@ cd ${INPUT_DIR}
 ls -1 *.jpg \
     | grep -v ".cropped.jpg" \
     | sed 's/.jpg$//' \
-    | xargs -iXX convert -verbose -virtual-pixel edge -fuzz "${FUZZ}" -trim XX.jpg ${OUTPUT_DIR}/XX.cropped.jpg
+    | xargs -iXX bash -c 'convert -verbose -virtual-pixel edge -crop \
+            $(magick XX.jpg -virtual-pixel edge -blur 0x15 -fuzz '${FUZZ}' \
+                     -trim -format "%wx%h%O" info:) \
+            XX.jpg '${OUTPUT_DIR}'/XX.cropped.jpg'
